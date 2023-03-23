@@ -4,10 +4,14 @@ import {
   AnimationMixer,
   Clock,
   Color,
+  DoubleSide,
   EquirectangularReflectionMapping,
   HemisphereLight,
   LoadingManager,
+  Mesh,
+  MeshBasicMaterial,
   PerspectiveCamera,
+  PlaneGeometry,
   Scene,
   sRGBEncoding,
   Texture,
@@ -18,18 +22,19 @@ import {
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 
 @Injectable()
 export class SceneService {
   aspect!: number;
   camera!: PerspectiveCamera;
   container!: HTMLElement;
-  controls!: OrbitControls;
+  orbitControls!: OrbitControls;
   hemisphere!: HemisphereLight;
   loader!: GLTFLoader;
   mainLight!: AmbientLight;
   scene!: Scene;
-
+  transformControls!: TransformControls;
   deltaX = 0.01;
   deltaY = 0.01;
   deltaZ = 0.01;
@@ -78,16 +83,16 @@ export class SceneService {
   // CONTROLS
 
   private createControls = () =>
-    (this.controls = new OrbitControls(this.camera, this.container));
+    (this.orbitControls = new OrbitControls(this.camera, this.container));
 
   // LIGHTING
 
   private createLight = () => {
-    this.hemisphere = new HemisphereLight(
-      this.hemisphereOptions.skyColor,
-      this.hemisphereOptions.groundColor,
-      this.hemisphereOptions.intensity
-    );
+    // this.hemisphere = new HemisphereLight(
+    //   this.hemisphereOptions.skyColor,
+    //   this.hemisphereOptions.groundColor,
+    //   this.hemisphereOptions.intensity
+    // );
 
     this.mainLight = new AmbientLight(
       this.directionalLightOptions.color,
@@ -96,39 +101,47 @@ export class SceneService {
     this.mainLight.position.set(-7, -4, -9.5);
 
 
-    this.scene.add(this.hemisphere);
+    // this.scene.add(this.hemisphere);
   };
 
   // GEOMETRY
 
   public createModels = (modelPath: string, modelPosition: Vector3, modelScale: Vector3) => {
-    this.loader = new GLTFLoader(this.loadingManager);
-    const loadModel = (gltf: GLTF) => {
-      const model = gltf.scene.children[0];
-      model.position.copy(modelPosition);
-      model.scale.copy(modelScale);
+    return new Promise((resolve, reject) => {
 
-      const animation = gltf.animations[0];
+      this.loader = new GLTFLoader(this.loadingManager);
+      const loadModel = (gltf: GLTF) => {
+        const model = gltf.scene.children[0];
+        model.position.copy(modelPosition);
+        model.scale.copy(modelScale);
+        model.userData = { id: "some-id" }
+        const animation = gltf.animations[0];
 
-      if (animation) {
-        const mixer = new AnimationMixer(model);
-        this.mixers.push(mixer);
+        if (animation) {
+          const mixer = new AnimationMixer(model);
+          this.mixers.push(mixer);
 
-        const action = mixer.clipAction(animation);
-        action.play();
-      }
-      this.scene.add(model);
-      console.log(this.scene)
-    };
+          const action = mixer.clipAction(animation);
+          action.play();
+        }
+        this.scene.add(model);
+        this.orbitControls.enabled = false;
+        this.transformControls?.detach();  
+        
+        this.transformControls.attach(model);
+        this.scene.add(this.transformControls);
+        resolve(model);
+      };
 
-    this.loader.load(
-      modelPath,
-      (gltf) => {
-        loadModel(gltf);
-      },
-      () => { },
-      (err) => console.log(err)
-    );
+      this.loader.load(
+        modelPath,
+        (gltf) => {
+          loadModel(gltf);
+        },
+        () => { },
+        (err) => reject(err)
+      );
+    })
   };
 
   // RENDERER
@@ -149,8 +162,7 @@ export class SceneService {
       this.container.clientWidth,
       this.container.clientHeight
     );
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-
+    // this.renderer.setPixelRatio(window.devicePixelRatio);
     // this.renderer.gammaFactor = this.gammaFactor;
     // this.renderer.gammaOutput = true;
     this.renderer.physicallyCorrectLights = true;
@@ -174,6 +186,9 @@ export class SceneService {
     this.renderer.setAnimationLoop(() => {
       this.update();
       this.render();
+      if (this.transformControls) {
+        this.transformControls.updateMatrixWorld();
+      }
     });
 
   stop = () => this.renderer.setAnimationLoop(() => { });
@@ -187,8 +202,8 @@ export class SceneService {
     this.createCamera();
     this.createControls();
     this.createLight();
-
-    this.initializeLoadingManager();
+    this.transformControls = new TransformControls(this.camera, this.renderer.domElement);
+    // this.initializeLoadingManager();
     this.createRenderer();
     this.setEnviromentLighting().then((texture: any) => {
       this.scene.environment = texture;
@@ -230,9 +245,23 @@ export class SceneService {
     };
 
     this.loadingManager.onError = (url) => {
-
       console.log('There was an error loading ' + url);
     };
+  }
+
+  createPlane() {
+    const planeGeometry = new PlaneGeometry(10, 10);
+    const planeMaterial = new MeshBasicMaterial({
+      color: 0xffffff,
+      side: DoubleSide,
+    });
+    const plane = new Mesh(planeGeometry, planeMaterial);
+    plane.position.set(0, 0, 0);
+    plane.rotation.set(Math.PI / 2, 0, 0);
+    plane.scale.set(1, 1, 1);
+    this.scene.add(plane);
+    this.transformControls.add(plane);
+    return plane;
   }
 
 

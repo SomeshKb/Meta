@@ -1,2 +1,43 @@
-<div class="container" #container>
+<div class="parent-container">
+  <div class="selection-tab">
+    <h3>Add Asset to Metaverse</h3>
+    <input class="search" placeholder="Search">
+    <div *ngFor="let item of assetModels; let i=index" (click)="selectAsset(item.id)" class="assetNode">
+      {{item.name}}
+    </div>
+  </div>
+
+  <div class="container" #container (click)="sceneClicked($event)">
+  </div>
+
+  <div class="properties-tab">
+
+    <div class="action" *ngIf="model">
+      <button (click)="transformControlsModeListener('t')">Translate</button>
+      <button (click)="transformControlsModeListener('r')">Rotate</button>
+      <button (click)="transformControlsModeListener('s')">Scale</button>
+    </div>
+
+    <div class="input-group" *ngIf="model">
+      <span>Position</span>
+      <span>X: {{model.position.x}}</span>
+      <span>Y: {{model.position.y}}</span>
+      <span>Z: {{model.position.z}}</span>
+    </div>
+
+    <div class="input-group" *ngIf="model">
+      <span>Rotation</span>
+      <span>X: {{model.rotation.x}}</span>
+      <span>Y: {{model.rotation.y}}</span>
+      <span>Z: {{model.rotation.z}}</span>
+    </div>
+
+    <div class="input-group" *ngIf="model">
+      <span>Scale</span>
+      <span>X: {{model.scale.x}}</span>
+      <span>Y: {{model.scale.y}}</span>
+      <span>Z: {{model.scale.z}}</span>
+    </div>
+
+  </div>
 </div>
