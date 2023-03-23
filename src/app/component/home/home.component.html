@@ -1,10 +1,24 @@
 <div class="parent-container">
-  <div class="selection-tab">
-    <h3>Add Asset to Metaverse</h3>
-    <input class="search" placeholder="Search">
-    <div *ngFor="let item of assetModels; let i=index" (click)="selectAsset(item.id)" class="assetNode">
-      {{item.name}}
+  <div class="selection-hierarchy">
+
+    <div class="selection-tab">
+      <h3>Add Asset to Metaverse</h3>
+      <input class="search" placeholder="Search">
+      <div *ngFor="let item of assetModels; let i=index" (click)="selectAsset(item.id)" class="assetNode">
+        {{item.name}}
+      </div>
     </div>
+
+    <div class="hierarchy" *ngIf="models.length > 0">
+      <h3>Asset Hierarchy</h3>
+      <span *ngFor="let item of models; let i=index" class="hierarchy-models" (click)="selectModel(item)">
+        {{item.userData['name']}}
+      </span>
+
+    </div>
+
+    <button *ngIf="models.length > 0" class="save-button">Save</button>
+
   </div>
 
   <div class="container" #container (click)="sceneClicked($event)">
@@ -16,6 +30,10 @@
       <button (click)="transformControlsModeListener('t')">Translate</button>
       <button (click)="transformControlsModeListener('r')">Rotate</button>
       <button (click)="transformControlsModeListener('s')">Scale</button>
+    </div>
+
+    <div *ngIf="model">
+      <input [(ngModel)]="model.userData['name']">
     </div>
 
     <div class="input-group" *ngIf="model">

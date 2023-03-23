@@ -10,6 +10,7 @@ import {
   LoadingManager,
   Mesh,
   MeshBasicMaterial,
+  Object3D,
   PerspectiveCamera,
   PlaneGeometry,
   Scene,
@@ -39,7 +40,7 @@ export class SceneService {
   deltaY = 0.01;
   deltaZ = 0.01;
   far = 100;
-  fov = 35;
+  fov = 50;
   gammaFactor = 2.2;
   gammaOutput = true;
   near = 1;
@@ -76,7 +77,6 @@ export class SceneService {
       this.far
     );
 
-    // this.camera.position.set(-75, 35, 142);
     this.camera.position.set(7, 4, 9.5);
   };
 
@@ -114,7 +114,7 @@ export class SceneService {
         const model = gltf.scene.children[0];
         model.position.copy(modelPosition);
         model.scale.copy(modelScale);
-        model.userData = { id: "some-id" }
+        model.userData = { id: "some-id", name: "Kuka robot" }
         const animation = gltf.animations[0];
 
         if (animation) {
@@ -122,14 +122,11 @@ export class SceneService {
           this.mixers.push(mixer);
 
           const action = mixer.clipAction(animation);
-          action.play();
+          // action.play();
         }
         this.scene.add(model);
-        this.orbitControls.enabled = false;
-        this.transformControls?.detach();  
-        
-        this.transformControls.attach(model);
-        this.scene.add(this.transformControls);
+  
+        this.setTransformControl(model)
         resolve(model);
       };
 
@@ -157,6 +154,14 @@ export class SceneService {
       );
   };
 
+  setTransformControl(model: Object3D) {
+    this.orbitControls.enabled = false;
+    this.transformControls?.detach();
+
+    this.transformControls.attach(model);
+    this.scene.add(this.transformControls);
+  }
+
   private createRenderer = () => {
     this.renderer.setSize(
       this.container.clientWidth,
@@ -174,7 +179,6 @@ export class SceneService {
   };
 
   // INITIALIZATION
-
   private update = () => {
     const delta = this.clock.getDelta();
     this.mixers.forEach((x) => x.update(delta));
@@ -211,16 +215,13 @@ export class SceneService {
     this.start();
   };
 
-
   setEnviromentLighting() {
     return new Promise((resolve, reject) => {
       new RGBELoader(this.loadingManager).load('./assets/hdr/venice_sunset.hdr', (texture: Texture) => {
         texture.mapping = EquirectangularReflectionMapping;
         resolve(texture);
-      }
-      )
+      })
     });
-
   }
 
   initializeLoadingManager() {
@@ -235,7 +236,6 @@ export class SceneService {
       const loadingElement = this.container?.parentElement?.lastChild as HTMLElement;
       loadingElement.classList.add('fade-out');
     };
-
 
     this.loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
 
@@ -261,9 +261,8 @@ export class SceneService {
     plane.scale.set(1, 1, 1);
     this.scene.add(plane);
     this.transformControls.add(plane);
+    plane['userData'] = { name: "Plane" }
+    this.setTransformControl(plane)
     return plane;
   }
-
-
-
 }

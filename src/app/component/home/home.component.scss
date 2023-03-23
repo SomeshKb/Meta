@@ -9,32 +9,51 @@
         width: 60%;
     }
 
-    .selection-tab {
+    .selection-hierarchy {
         width: 20%;
         font-size: 16px;
 
-        .search {
-            width: 85%;
-            border-radius: 5px;
-            outline: none;
-            border: 1px solid grey;
-            padding: 3px 10px 3px 20px;
+        .selection-tab {
             font-size: 16px;
-            margin-bottom: 5px;
+            height: 45vh;
+
+            .search {
+                width: 85%;
+                border-radius: 5px;
+                outline: none;
+                border: 1px solid grey;
+                padding: 3px 10px 3px 20px;
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+
+            .assetNode {
+                padding: 5px 2px;
+                width: 90%;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+
+            .assetNode:hover {
+                background-color: grey;
+                color: white;
+            }
+
         }
 
-        .assetNode {
-            padding: 5px 2px;
-            width: 90%;
-            border-radius: 10px;
-            cursor: pointer;
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            height: 40vh;
+            .hierarchy-models {
+            }
+        
         }
 
-        .assetNode:hover {
-            background-color: grey;
-            color: white;
+        .save-button {
+            width: 50%;    
+            margin-left: 22%;
         }
-
     }
 
     .properties-tab {
@@ -47,11 +66,7 @@
             flex-direction: row;
             justify-content: space-around;
 
-            button {
-                border: 1px solid #cacaca;
-                padding: 5px 10px;
-                min-width: 25%;
-            }
+
         }
 
         .input-group {
@@ -59,4 +74,10 @@
             flex-direction: column;
         }
     }
+}
+
+button {
+    border: 1px solid #cacaca;
+    padding: 5px 10px;
+    min-width: 25%;
 }
