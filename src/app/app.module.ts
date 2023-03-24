@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { SceneService } from './service/scene.service';
 import { HomeComponent } from './component/home/home.component';
 import { FormsModule } from '@angular/forms';
+import { SensorMappingComponent } from './component/sensor-mapping/sensor-mapping.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    SensorMappingComponent
   ],
   imports: [
     BrowserModule,

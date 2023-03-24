@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AmbientLight,
   AnimationMixer,
+  AxesHelper,
   Clock,
   Color,
   DoubleSide,
@@ -125,7 +126,7 @@ export class SceneService {
           // action.play();
         }
         this.scene.add(model);
-  
+
         this.setTransformControl(model)
         resolve(model);
       };
