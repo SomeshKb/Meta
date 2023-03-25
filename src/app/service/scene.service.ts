@@ -114,7 +114,7 @@ export class SceneService {
 
   // GEOMETRY
 
-  public createModels = (modelPath: string, modelPosition: Vector3, modelScale: Vector3) => {
+  public createModels = (modelPath: string, modelPosition: Vector3, modelScale: Vector3, modelName: string, modelId: string) => {
     return new Promise((resolve, reject) => {
 
       this.loader = new GLTFLoader(this.loadingManager);
@@ -122,7 +122,7 @@ export class SceneService {
         const model = gltf.scene.children[0];
         model.position.copy(modelPosition);
         model.scale.copy(modelScale);
-        model.userData = { id: "some-id", name: "Kuka robot" }
+        model.userData = { id: modelId, name: modelName }
         const animation = gltf.animations[0];
 
         if (animation) {
@@ -270,7 +270,7 @@ export class SceneService {
     plane.scale.set(1, 1, 1);
     this.scene.add(plane);
     this.transformControls.add(plane);
-    plane['userData'] = { name: "Plane" }
+    plane['userData'] = { name: "Plane", id: "plane" }
     this.setTransformControl(plane)
     return plane;
   }
@@ -285,7 +285,5 @@ export class SceneService {
     
     const gridHelper = new GridHelper( size, divisions );
     this.scene.add( gridHelper );
-
-    
   }
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { SceneService } from 'src/app/service/scene.service';
 import { Object3D, Vector3 } from 'three';
 
@@ -7,7 +7,7 @@ import { Object3D, Vector3 } from 'three';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('container')
   set container(container: ElementRef) {
     if (!this.sceneService.scene) {
@@ -15,26 +15,62 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
   models: Object3D[] = [];
-
   model: Object3D;
   assetModels = [{ name: "Kuka Robot", id: "kuka" }, { name: "Plane", id: "plane" }];
 
-  constructor(@Inject(SceneService) private sceneService: SceneService) { }
+  constructor(@Inject(SceneService) private sceneService: SceneService, private renderer: Renderer2) { }
+
 
   ngOnInit(): void {
     // this.sceneService.createModels("assets/factory.glb", new Vector3(0,0,0), new Vector3(0.01,0.01,0.01));
     // this.sceneService.createModels("assets/kuka.glb", new Vector3(0, 0, 0), new Vector3(0.01, 0.01, 0.01));
   }
 
+  ngAfterViewInit(): void {
+    this.renderer.listen(window, 'mousewheel', (event) => {
+      const isZommed = event.deltaY < 0;
+      if (event.target.parentNode == this.sceneService.container) {
+        // this.sceneService.camera.zoom += 1;
+        // this.sceneService.camera.updateProjectionMatrix();
+        // this.sceneService.transformControls.updateMatrix();
+
+        this.sceneService.orbitControls.enabled = true;
+        if (isZommed) {
+          window.dispatchEvent(new Event("scroll"));
+          window.dispatchEvent(new Event("custom-zoom-in"));
+        } else {
+          window.dispatchEvent(new Event("scroll"));
+          window.dispatchEvent(new Event("custom-zoom-out"));
+        }
+        event.stopPropagation();
+      }
+    });
+
+    this.renderer.listen(window, 'custom-zoom-in', (event) => {
+      setTimeout(() => {
+        this.sceneService.orbitControls.enabled = false;
+        console.log(this.sceneService.camera)
+      }, 100);
+
+    });
+
+    this.renderer.listen(window, 'custom-zoom-out', (event) => {
+      setTimeout(() => {
+        this.sceneService.orbitControls.enabled = false;
+        console.log(this.sceneService.camera)
+      }, 100);
+    });
+  }
+
+
   selectAsset(id: string) {
     this.transformControlsModeListener('t');
     switch (id) {
       case "kuka": {
-        this.sceneService.createModels("assets/kuka.glb", new Vector3(0, 0, 0), new Vector3(0.01, 0.01, 0.01)).then(model => {
+        this.sceneService.createModels("assets/kuka.glb", new Vector3(0, 0, 0), new Vector3(0.01, 0.01, 0.01), "Kuka Robot", "kuka").then(model => {
           this.model = model as Object3D;
-            this.models.push(model as Object3D);
+          this.models.push(model as Object3D);
         }).catch(err => {
           console.log(err);
         })
@@ -77,15 +113,28 @@ export class HomeComponent implements OnInit {
     // const model = this.getClickedModel(event, this.sceneService.camera, this.sceneService.scene, this.sceneService.transformControls);
     // console.log(model);
     console.log(this.model)
+
   }
+
 
   selectModel(item: Object3D) {
     this.model = item;
     this.sceneService.setTransformControl(this.model);
     this.transformControlsModeListener('t');
   }
-  
 
+  onScroll(event: any) {
+    console.log(this.onScroll)
+  }
+
+  saveMapping() {
+    const models = this.models.map((x: Object3D) => {
+      const rotation = { x: x.rotation.x, y: x.rotation.y, z: x.rotation.z }
+      const data = { id: x.userData['id'], name: x.userData['name'], position: x.position, scale: x.scale, rotation: rotation };
+      return data;
+    });
+    console.log(models)
+  }
   // getClickedModel(event: MouseEvent, camera: PerspectiveCamera, scene: THREE.Scene, transformControls: TransformControls | null): THREE.Object3D | null {
   //   // Remove TransformControls from the scene if it exists  
   //   if (transformControls && transformControls.parent === scene) {
