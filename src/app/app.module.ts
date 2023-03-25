@@ -7,12 +7,16 @@ import { SceneService } from './service/scene.service';
 import { HomeComponent } from './component/home/home.component';
 import { FormsModule } from '@angular/forms';
 import { SensorMappingComponent } from './component/sensor-mapping/sensor-mapping.component';
+import { CreateMetaverseComponent } from './component/create-metaverse/create-metaverse.component';
+import { ViewMetaverseComponent } from './component/view-metaverse/view-metaverse.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    SensorMappingComponent
+    SensorMappingComponent,
+    CreateMetaverseComponent,
+    ViewMetaverseComponent
   ],
   imports: [
     BrowserModule,

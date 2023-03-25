@@ -8,6 +8,7 @@ import {
   Color,
   DoubleSide,
   EquirectangularReflectionMapping,
+  Euler,
   GridHelper,
   HemisphereLight,
   LoadingManager,
@@ -71,6 +72,9 @@ export class SceneService {
     groundColor: 0x08020,
     intensity: 4,
   };
+
+  axesHelper: AxesHelper;
+   gridHelper: GridHelper;
 
   // CAMERA
 
@@ -258,16 +262,17 @@ export class SceneService {
     };
   }
 
-  createPlane() {
+  createPlane(position?: Vector3, rotation?: Euler, scale?: Vector3) {
     const planeGeometry = new PlaneGeometry(10, 10);
     const planeMaterial = new MeshBasicMaterial({
-      color: 0xffffff,
+      color: 0x6b6b6b,
       side: DoubleSide,
     });
     const plane = new Mesh(planeGeometry, planeMaterial);
-    plane.position.set(0, 0, 0);
-    plane.rotation.set(Math.PI / 2, 0, 0);
-    plane.scale.set(1, 1, 1);
+    position ? plane.position.copy(position) : plane.position.set(0, 0, 0)
+    rotation ? plane.rotation.copy(rotation) : plane.rotation.set(Math.PI / 2, 0, 0);
+    scale ? plane.scale.copy(scale) : plane.scale.set(1, 1, 1);
+
     this.scene.add(plane);
     this.transformControls.add(plane);
     plane['userData'] = { name: "Plane", id: "plane" }
@@ -277,13 +282,13 @@ export class SceneService {
 
 
   addAxesHelper() {
-    const axesHelper = new AxesHelper(100);
-    this.scene.add(axesHelper);
+    this.axesHelper = new AxesHelper(100);
+    this.scene.add(this.axesHelper);
 
     const size = 100;
     const divisions = 200;
-    
-    const gridHelper = new GridHelper( size, divisions );
-    this.scene.add( gridHelper );
+
+    this.gridHelper = new GridHelper(size, divisions);
+    this.scene.add(this.gridHelper);
   }
 }

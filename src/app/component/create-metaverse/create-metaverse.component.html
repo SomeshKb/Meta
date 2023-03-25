@@ -1,0 +1,69 @@
+<div class="parent-container">
+    <div class="selection-hierarchy">
+  
+      <div class="selection-tab">
+        <h3>Add Asset to Metaverse</h3>
+        <input class="search" placeholder="Search">
+        <div *ngFor="let item of assetModels; let i=index" (click)="selectAsset(item.id)" class="assetNode">
+          {{item.name}}
+        </div>
+      </div>
+  
+      <div class="hierarchy" *ngIf="models.length > 0">
+        <h3>Selected Assets</h3>
+        <span *ngFor="let item of models; let i=index" class="hierarchy-models" (click)="selectModel(item)">
+          {{item.userData['name']}}
+        </span>
+  
+      </div>
+  
+      <button *ngIf="models.length > 0" (click)="saveMapping()" class="save-button">Save</button>
+  
+    </div>
+  
+    <div class="container" #container (click)="sceneClicked($event)">
+    </div>
+  
+    <div class="properties-tab">
+  
+      <div class="action" *ngIf="model">
+        <button (click)="transformControlsModeListener('t')">Translate</button>
+        <button (click)="transformControlsModeListener('r')">Rotate</button>
+        <button (click)="transformControlsModeListener('s')">Scale</button>
+      </div>
+  
+      <div *ngIf="model">
+        <input [(ngModel)]="model.userData['name']">
+      </div>
+  
+      <div class="input-group" *ngIf="model">
+        <span>Position</span>
+        <span>X: <input type="number" [(ngModel)]="model.position.x"></span>
+        <span>Y: <input type="number" [(ngModel)]="model.position.y"></span>
+        <span>Z: <input type="number" [(ngModel)]="model.position.z"></span>
+      </div>
+  
+      <div class="input-group" *ngIf="model">
+        <span>Rotation</span>
+        <span>X: <input type="number" [(ngModel)]="model.rotation.x"></span>
+        <span>Y: <input type="number" [(ngModel)]="model.rotation.y"></span>
+        <span>Z: <input type="number" [(ngModel)]="model.rotation.z"></span>
+      </div>
+  
+      <div class="input-group" *ngIf="model">
+        <span>Scale</span>
+        <span>X: <input type="number" [(ngModel)]="model.scale.x"></span>
+        <span>Y: <input type="number" [(ngModel)]="model.scale.y"></span>
+        <span>Z: <input type="number" [(ngModel)]="model.scale.z"></span>
+      </div>
+  
+      <div class="connection">
+        <h3>Connection</h3>
+        <span class="dataservice-connection">
+          URL: <input type="text">
+          <button> Connect</button>
+        </span>
+      </div>
+  
+    </div>
+  </div>
