@@ -3,10 +3,12 @@ import {
   AmbientLight,
   AnimationMixer,
   AxesHelper,
+  CameraHelper,
   Clock,
   Color,
   DoubleSide,
   EquirectangularReflectionMapping,
+  GridHelper,
   HemisphereLight,
   LoadingManager,
   Mesh,
@@ -22,9 +24,11 @@ import {
 } from 'three';
 
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
+import { OrbitControlsGizmo } from "../../assets/OrbitControlsGizmo/OrbitControlsGizmo";
+import { OrbitControls } from '../../assets/OrbitControlCustom/OrbitControls';
+
 
 @Injectable()
 export class SceneService {
@@ -83,8 +87,11 @@ export class SceneService {
 
   // CONTROLS
 
-  private createControls = () =>
-    (this.orbitControls = new OrbitControls(this.camera, this.container));
+  private createControls = () => {
+    this.orbitControls = new OrbitControls(this.camera, this.container);
+    const controlsGizmo = new OrbitControlsGizmo(this.orbitControls, { size: 100, padding: 8 });
+    this.container.appendChild(controlsGizmo.domElement);
+  }
 
   // LIGHTING
 
@@ -179,7 +186,6 @@ export class SceneService {
     window.addEventListener('resize', this.onWindowResize);
   };
 
-  // INITIALIZATION
   private update = () => {
     const delta = this.clock.getDelta();
     this.mixers.forEach((x) => x.update(delta));
@@ -207,6 +213,7 @@ export class SceneService {
     this.createCamera();
     this.createControls();
     this.createLight();
+    this.addAxesHelper();
     this.transformControls = new TransformControls(this.camera, this.renderer.domElement);
     // this.initializeLoadingManager();
     this.createRenderer();
@@ -214,6 +221,7 @@ export class SceneService {
       this.scene.environment = texture;
     })
     this.start();
+
   };
 
   setEnviromentLighting() {
@@ -265,5 +273,19 @@ export class SceneService {
     plane['userData'] = { name: "Plane" }
     this.setTransformControl(plane)
     return plane;
+  }
+
+
+  addAxesHelper() {
+    const axesHelper = new AxesHelper(100);
+    this.scene.add(axesHelper);
+
+    const size = 100;
+    const divisions = 200;
+    
+    const gridHelper = new GridHelper( size, divisions );
+    this.scene.add( gridHelper );
+
+    
   }
 }
