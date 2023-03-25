@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { SceneService } from 'src/app/service/scene.service';
 import { Euler, Vector3 } from 'three';
+import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
 
 @Component({
   selector: 'app-view-metaverse',
@@ -41,11 +42,16 @@ export class ViewMetaverseComponent implements OnInit, AfterViewInit {
   constructor(@Inject(SceneService) private sceneService: SceneService, private renderer: Renderer2) { }
 
   ngOnInit(): void {
-
+    
   }
 
   ngAfterViewInit(): void {
     this.generateModel();
+
+    document.body.appendChild( VRButton.createButton( this.sceneService.renderer) );
+    this.sceneService.renderer.xr.enabled = true;
+
+    
   }
 
   generateModel() {
