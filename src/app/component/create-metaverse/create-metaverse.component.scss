@@ -47,6 +47,13 @@
             height: 40vh;
             .hierarchy-models {
                 cursor: pointer;
+
+                .asset-content{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 2px;
+                }
             }
         
         }

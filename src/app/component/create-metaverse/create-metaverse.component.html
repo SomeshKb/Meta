@@ -12,7 +12,7 @@
       <div class="hierarchy" *ngIf="models.length > 0">
         <h3>Selected Assets</h3>
         <span *ngFor="let item of models; let i=index" class="hierarchy-models" (click)="selectModel(item)">
-          {{item.userData['name']}}
+          <span class="asset-content">{{item.userData['name']}}<mat-icon (click)="deleteModel(item)" >delete</mat-icon></span>
         </span>
   
       </div>

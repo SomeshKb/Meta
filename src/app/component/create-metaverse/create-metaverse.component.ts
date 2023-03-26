@@ -18,9 +18,9 @@ export class CreateMetaverseComponent {
   model: Object3D;
 
   assetModels = [{ name: "Kuka Robot", id: "kuka" }, { name: "Plane", id: "plane" },
-  { name: "Conveyor", id: "conveyor" }, 
-  // { name: "Curved Conveyor", id: "conveyor2" },
-  { name: "Motorised Conveyor", id: "motor-conveyor" }
+  { name: "Roller Conveyor", id: "conveyor" },
+  { name: "Curved Roller Conveyor", id: "conveyor2" },
+  { name: "Belt Conveyor", id: "motor-conveyor" }
   ];
 
   constructor(@Inject(SceneService) private sceneService: SceneService, private renderer: Renderer2) { }
@@ -85,7 +85,7 @@ export class CreateMetaverseComponent {
       }
 
       case "conveyor": {
-        this.sceneService.createModels("assets/conveyor.glb", new Vector3(0, 0, 0), new Vector3(1,1,1), "Conveyor", "conveyor").then(model => {
+        this.sceneService.createModels("assets/conveyor.glb", new Vector3(0, 0, 0), new Vector3(1, 1, 1), "Roller Conveyor", "conveyor").then(model => {
           this.model = model as Object3D;
           this.models.push(model as Object3D);
         }).catch(err => {
@@ -94,7 +94,7 @@ export class CreateMetaverseComponent {
       }; break;
 
       case "conveyor2": {
-        this.sceneService.createModels("assets/conveyor2.glb", new Vector3(0, 0, 0), new Vector3(1,1,1), "Curved Conveyor", "conveyor2").then(model => {
+        this.sceneService.createModels("assets/conveyor2.glb", new Vector3(0, 0, 0), new Vector3(1, 1, 1), "Curved Roller Conveyor", "conveyor2").then(model => {
           this.model = model as Object3D;
           this.models.push(model as Object3D);
         }).catch(err => {
@@ -103,7 +103,7 @@ export class CreateMetaverseComponent {
       }; break;
 
       case "motor-conveyor": {
-        this.sceneService.createModels("assets/factory_conveyer.glb", new Vector3(0, 0, 0), new Vector3(0.01, 0.01, 0.01), "Motorised Conveyor", "motor-conveyor").then(model => {
+        this.sceneService.createModels("assets/factory_conveyer.glb", new Vector3(0, 0, 0), new Vector3(0.01, 0.01, 0.01), "Belt Conveyor", "motor-conveyor").then(model => {
           this.model = model as Object3D;
           this.models.push(model as Object3D);
         }).catch(err => {
@@ -159,51 +159,12 @@ export class CreateMetaverseComponent {
     });
     console.log(models)
   }
-  // getClickedModel(event: MouseEvent, camera: PerspectiveCamera, scene: THREE.Scene, transformControls: TransformControls | null): THREE.Object3D | null {
-  //   // Remove TransformControls from the scene if it exists  
-  //   if (transformControls && transformControls.parent === scene) {
-  //     scene.remove(transformControls);
-  //   }
 
-  //   // Perform raycasting  
-  //   const raycaster = new Raycaster();
-  //   const mouse = new Vector2();
-  //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  //   mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-  //   raycaster.setFromCamera(mouse, camera);
 
-  //   // raycaster.far = camera.far * 100000;
-  //   camera.far = camera.far * 10000;
-  //   camera.updateProjectionMatrix();
+  deleteModel(model: Object3D) {
+    // this.sceneService.transformControls.removeFromParent();
+    // model.removeFromParent();
+  }
 
-  //   const intersects = raycaster.intersectObjects(scene.children, true);
 
-  //   // Reset the camera's far property  
-  //   camera.far = camera.far / 10000;
-  //   camera.updateProjectionMatrix();
-  //   if (transformControls && transformControls.parent !== scene) {
-  //     scene.add(transformControls);
-  //   }
-
-  //   // Loop through intersected objects and find the top-level parent  
-  //   for (let i = 0; i < intersects.length; i++) {
-  //     let object = intersects[i].object;
-  //     while (object && object.parent !== scene) {
-  //       object = this.getParent(object.parent, scene) as Object3D;
-  //     }
-  //     if (object) {
-  //       return object;
-  //     }
-  //   }
-
-  //   return null;
-  // }
-
-  // getParent(object: any, scene: THREE.Scene): any {
-  //   if (object.parent && object.parent !== scene) {
-  //     return this.getParent(object.parent, scene);
-  //   } else {
-  //     return object;
-  //   }
-  // }
 }
