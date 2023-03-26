@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { SensorMappingComponent } from './component/sensor-mapping/sensor-mapping.component';
 import { CreateMetaverseComponent } from './component/create-metaverse/create-metaverse.component';
 import { ViewMetaverseComponent } from './component/view-metaverse/view-metaverse.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material/material.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { ViewMetaverseComponent } from './component/view-metaverse/view-metavers
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MaterialModule
   ],
   providers: [SceneService],
   bootstrap: [AppComponent]

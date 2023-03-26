@@ -9,6 +9,27 @@
     margin-right: 7px;
     height: 100vh;
     width: 60px;
+
+    .nav-items{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-items: center;
+
+        mat-icon {
+            height: 30px;
+            width: 30px;
+            font-size: 30px;
+            margin-top: 20px;
+            cursor: pointer;
+            color: #6b6b6b;
+        }
+
+        mat-icon:hover {
+            color: #afafaf;
+        }
+    }
+
 }
 
 .router-container{
