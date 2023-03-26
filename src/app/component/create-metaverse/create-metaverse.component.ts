@@ -14,10 +14,14 @@ export class CreateMetaverseComponent {
       this.sceneService.initialize(container.nativeElement);
     }
   }
-
   models: Object3D[] = [];
   model: Object3D;
-  assetModels = [{ name: "Kuka Robot", id: "kuka" }, { name: "Plane", id: "plane" }];
+
+  assetModels = [{ name: "Kuka Robot", id: "kuka" }, { name: "Plane", id: "plane" },
+  { name: "Conveyor", id: "conveyor" }, 
+  // { name: "Curved Conveyor", id: "conveyor2" },
+  { name: "Motorised Conveyor", id: "motor-conveyor" }
+  ];
 
   constructor(@Inject(SceneService) private sceneService: SceneService, private renderer: Renderer2) { }
 
@@ -79,6 +83,33 @@ export class CreateMetaverseComponent {
         this.models.push(this.model as Object3D);
         break;
       }
+
+      case "conveyor": {
+        this.sceneService.createModels("assets/conveyor.glb", new Vector3(0, 0, 0), new Vector3(1,1,1), "Conveyor", "conveyor").then(model => {
+          this.model = model as Object3D;
+          this.models.push(model as Object3D);
+        }).catch(err => {
+          console.log(err);
+        })
+      }; break;
+
+      case "conveyor2": {
+        this.sceneService.createModels("assets/conveyor2.glb", new Vector3(0, 0, 0), new Vector3(1,1,1), "Curved Conveyor", "conveyor2").then(model => {
+          this.model = model as Object3D;
+          this.models.push(model as Object3D);
+        }).catch(err => {
+          console.log(err);
+        })
+      }; break;
+
+      case "motor-conveyor": {
+        this.sceneService.createModels("assets/factory_conveyer.glb", new Vector3(0, 0, 0), new Vector3(0.01, 0.01, 0.01), "Motorised Conveyor", "motor-conveyor").then(model => {
+          this.model = model as Object3D;
+          this.models.push(model as Object3D);
+        }).catch(err => {
+          console.log(err);
+        })
+      }; break;
 
       default: break;
     }
