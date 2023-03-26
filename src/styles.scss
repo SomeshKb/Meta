@@ -1,11 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Roboto');
-body, html {
-    font-family: 'Roboto';
-  }
 
+body,
+html {
+  font-family: 'Roboto';
+}
 
-  .obit-controls-gizmo {
-    position: absolute;
-    
-  }
+body {
+  height: 100vh;
+  width: 100%;
+  margin: 0px;
+}
+
+.obit-controls-gizmo {
+  position: absolute;
+
+}
