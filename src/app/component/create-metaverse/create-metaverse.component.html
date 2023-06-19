@@ -3,7 +3,14 @@
   
       <div class="selection-tab">
         <h3>Add Asset to Metaverse</h3>
-        <input class="search" placeholder="Search">
+        <mat-form-field class="search">
+          <mat-label>Search</mat-label>
+          <input matInput type="text" [(ngModel)]="searchText">
+          <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear" (click)="searchText=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
         <div *ngFor="let item of assetModels; let i=index" (click)="selectAsset(item.id)" class="assetNode">
           {{item.name}}
         </div>
@@ -11,10 +18,11 @@
   
       <div class="hierarchy" *ngIf="models.length > 0">
         <h3>Selected Assets</h3>
-        <span *ngFor="let item of models; let i=index" class="hierarchy-models" (click)="selectModel(item)">
+        <div class="list">
+        <span *ngFor="let item of models; let i=index" class="hierarchy-models" (click)="selectModel(item)" [ngClass]="{'selected-asset': item.uuid==model.uuid}">
           <span class="asset-content">{{item.userData['name']}}<mat-icon (click)="deleteModel(item)" >delete</mat-icon></span>
         </span>
-  
+      </div>
       </div>
   
       <button *ngIf="models.length > 0" (click)="saveMapping()" class="save-button">Save</button>

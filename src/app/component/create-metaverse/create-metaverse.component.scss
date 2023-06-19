@@ -16,27 +16,27 @@
         .selection-tab {
             font-size: 16px;
             height: 45vh;
+            overflow-y: auto;
 
             .search {
-                width: 85%;
-                border-radius: 5px;
-                outline: none;
-                border: 1px solid grey;
-                padding: 3px 10px 3px 20px;
-                font-size: 16px;
-                margin-bottom: 5px;
+                width: 97%;
+                background-color: none;
+                button {
+                    border: none;
+                    background: none;
+                }
             }
 
             .assetNode {
                 padding: 5px 2px;
                 width: 90%;
-                border-radius: 10px;
+                border-radius: 5px;
                 cursor: pointer;
             }
 
             .assetNode:hover {
-                background-color: grey;
-                color: white;
+                background-color: #a0a0a0;
+                color: #ffffff;
             }
 
         }
@@ -45,21 +45,36 @@
             display: flex;
             flex-direction: column;
             height: 40vh;
-            .hierarchy-models {
-                cursor: pointer;
+            padding-right: 5px;
 
-                .asset-content{
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 2px;
+            .list {
+                overflow-y: auto;
+
+                .selected-asset {
+                    .asset-content {
+                        background-color: #a0a0a0;
+                        color: #ffffff;
+                        border-radius: 5px;
+                    }
+                }
+
+                .hierarchy-models {
+                    cursor: pointer;
+
+                    .asset-content {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 2px;
+                        padding: 2px 5px;
+                    }
                 }
             }
-        
+
         }
 
         .save-button {
-            width: 50%;    
+            width: 50%;
             margin-left: 22%;
         }
     }
@@ -69,6 +84,7 @@
         display: flex;
         flex-direction: column;
         margin: 0px 2px;
+
         .action {
             display: flex;
             flex-direction: row;
@@ -80,12 +96,6 @@
             flex-direction: column;
         }
     }
-}
-
-button {
-    border: 1px solid #cacaca;
-    padding: 2px 5px;
-    min-width: 25%;
 }
 
 input {

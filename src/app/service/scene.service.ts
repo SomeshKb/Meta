@@ -219,7 +219,7 @@ export class SceneService {
     this.createLight();
     this.addAxesHelper();
     this.transformControls = new TransformControls(this.camera, this.renderer.domElement);
-    // this.initializeLoadingManager();
+    this.initializeLoadingManager();
     this.createRenderer();
     this.setEnviromentLighting().then((texture: any) => {
       this.scene.environment = texture;
@@ -240,21 +240,21 @@ export class SceneService {
   initializeLoadingManager() {
     this.loadingManager.onStart = (url, itemsLoaded, itemsTotal) => {
 
-      const loadingElement = this.container?.parentElement?.lastChild as HTMLElement;
-      loadingElement.classList.remove('fade-out');
+      // console.log()
+      const loadingElement = document.getElementById('loader')?.parentElement;
+      loadingElement?.classList.remove('fade-out');
     };
 
     this.loadingManager.onLoad = () => {
-
-      const loadingElement = this.container?.parentElement?.lastChild as HTMLElement;
-      loadingElement.classList.add('fade-out');
+      const loadingElement = document.getElementById('loader')?.parentElement;
+      loadingElement?.classList.add('fade-out');
     };
 
     this.loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
 
-      const loadingElement: HTMLElement = this.container?.parentElement?.lastChild as HTMLElement;
-      const loadingTextDiv = loadingElement?.lastChild as HTMLElement;
-      loadingTextDiv.innerText = Math.round(itemsLoaded / itemsTotal * 100,) + '%';
+      const loadingElement = document.getElementById('loader')?.parentElement;
+      // const loadingTextDiv = loadingElement?.lastChild as HTMLElement;
+      // loadingTextDiv.innerText = Math.round(itemsLoaded / itemsTotal * 100,) + '%';
     };
 
     this.loadingManager.onError = (url) => {

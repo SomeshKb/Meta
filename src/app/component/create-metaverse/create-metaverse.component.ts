@@ -22,7 +22,7 @@ export class CreateMetaverseComponent {
   { name: "Curved Roller Conveyor", id: "conveyor2" },
   { name: "Belt Conveyor", id: "motor-conveyor" }
   ];
-
+  searchText: string = "";
   constructor(@Inject(SceneService) private sceneService: SceneService, private renderer: Renderer2) { }
 
 
@@ -146,6 +146,8 @@ export class CreateMetaverseComponent {
 
 
   selectModel(item: Object3D) {
+    console.log(item)
+    console.log(this.model)
     this.model = item;
     this.sceneService.setTransformControl(this.model);
     this.transformControlsModeListener('t');
